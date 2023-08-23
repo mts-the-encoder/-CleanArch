@@ -31,12 +31,16 @@ namespace CleanArch.Infra.Data.Repositories;
         }
 
         public async Task<Category> UpdateAsync(Category category)
-        {
-            throw new NotImplementedException();
+        { 
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
+            return category;
         }
 
         public async Task<Category> RemoveAsync(Category category)
         {
-            throw new NotImplementedException();
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+            return category;
         }
     }

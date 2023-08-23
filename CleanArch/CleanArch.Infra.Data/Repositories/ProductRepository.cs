@@ -1,6 +1,7 @@
 ﻿using CleanArch.Domain.Entities;
 using CleanArch.Domain.Interfaces;
 using CleanArch.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArch.Infra.Data.Repositories;
 
@@ -13,28 +14,36 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Product>> GetAllAsync()
+    public async Task<IEnumerable<Product?>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Products.ToListAsync();
     }
 
-    public async Task<Product> GetByIdAsync(int id)
+    public async Task<Product?> GetProductCategoryAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _context.Products
+            .Include(x => x.Category)
+            .SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<Product> CreateAsync(Product category)
+    public async Task<Product> CreateAsync(Product product)
     {
-        throw new NotImplementedException();
+        _context.Products.Add(product);
+        await _context.SaveChangesAsync();
+        return product;
     }
 
-    public async Task<Product> UpdateAsync(Product category)
+    public async Task<Product> UpdateAsync(Product product)
     {
-        throw new NotImplementedException();
+        _context.Products.Update(product);
+        await _context.SaveChangesAsync();
+        return product;
     }
 
-    public async Task<Product> RemoveAsync(Product category)
+    public async Task<Product> RemoveAsync(Product product)
     {
-        throw new NotImplementedException();
+        _context.Products.Remove(product);
+        await _context.SaveChangesAsync();
+        return product;
     }
 }

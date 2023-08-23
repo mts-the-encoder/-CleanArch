@@ -1,9 +1,15 @@
+using CleanArch.Infra.IoC;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -18,6 +24,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//seedUserRoleInitial.SeedRoles();
+//seedUserRoleInitial.SeedUsers();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -25,3 +35,16 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+//void SeedUserRoles(IApplicationBuilder app)
+//{
+//    using (var serviceScope = app.ApplicationServices.CreateScope())
+//    {
+//        var seed = serviceScope.ServiceProvider
+//            .GetService<ISeedUserRoleInitial>();
+
+//        seed.SeedUsers();
+//        seed.SeedRoles();
+//    }
+//}
