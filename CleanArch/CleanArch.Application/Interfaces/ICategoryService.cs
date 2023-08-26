@@ -6,7 +6,7 @@ public interface ICategoryService
 {
     Task<IEnumerable<CategoryDTO>> GetAll();
     Task<CategoryDTO> GetById(int? id);
-    Task Add(CategoryDTO categoryDTO);
+    Task<CategoryDTO> Add(CategoryDTO request);
     Task Update(CategoryDTO categoryDTO);
     Task Delete(int? id);
 }
