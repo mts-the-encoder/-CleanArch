@@ -23,36 +23,39 @@ public class ProductService : IProductService
         return _mapper.Map<IEnumerable<ProductDTO>>(products);
     }
 
-    public async Task<CategoryDTO> GetById(int? id)
+    public async Task<ProductDTO> GetById(int? id)
     {
         var product = await _repository.GetByIdAsync(id);
 
-        return _mapper.Map<CategoryDTO>(product);
-    }
-
-    public async Task<ProductDTO> GetProductCategory(int? id)
-    {
-        var product = await _repository.GetProductCategoryAsync(id);
         return _mapper.Map<ProductDTO>(product);
     }
 
-    public async Task Add(ProductDTO productDto)
+    public async Task<IEnumerable<ProductDTO>> GetProductCategory(int? id)
+    {
+        var product = await _repository.GetProductCategoryAsync(id);
+        return _mapper.Map<IEnumerable<ProductDTO>>(product);
+    }
+
+    public async Task<ProductDTO> Add(ProductDTO productDto)
     {
         var product = _mapper.Map<Product>(productDto);
         await _repository.CreateAsync(product);
+
+        return productDto;
     }
 
-    public async Task Update(ProductDTO productDto)
+    public async Task<ProductDTO> Update(ProductDTO productDto)
     {
         var product = _mapper.Map<Product>(productDto);
         await _repository.UpdateAsync(product);
+
+        return productDto;
     }
 
-    public async Task DeleteById(int? id)
+    public async Task Delete(int? id)
     {
         var product = _repository.GetByIdAsync(id).Result;
 
-        _ = product is null ? throw new Exception("not found")
-            : await _repository.RemoveAsync(product);
+        await _repository.RemoveAsync(product);
     }
 }

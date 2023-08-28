@@ -5,9 +5,9 @@ namespace CleanArch.Application.Interfaces;
 public interface IProductService
 {
     Task<IEnumerable<ProductDTO>> GetAll();
-    Task<CategoryDTO> GetById(int? id);
-    Task<ProductDTO> GetProductCategory(int? id);
-    Task Add(ProductDTO productDto);
-    Task Update(ProductDTO productDto);
-    Task DeleteById(int? id);
+    Task<ProductDTO> GetById(int? id);
+    Task<IEnumerable<ProductDTO>> GetProductCategory(int? id);
+    Task<ProductDTO> Add(ProductDTO productDto);
+    Task<ProductDTO> Update(ProductDTO productDto);
+    Task Delete(int? id);
 }

@@ -24,11 +24,12 @@ public class ProductRepository : IProductRepository
         return await _context.Products.FindAsync(id);
     }
 
-    public async Task<Product?> GetProductCategoryAsync(int? id)
+    public async Task<IEnumerable<Product?>> GetProductCategoryAsync(int? id)
     {
         return await _context.Products
             .Include(x => x.Category)
-            .SingleOrDefaultAsync(x => x.Id == id);
+            .Where(x => x.CategoryId == id)
+            .ToListAsync();
     }
 
     public async Task<Product> CreateAsync(Product product)
@@ -45,10 +46,9 @@ public class ProductRepository : IProductRepository
         return product;
     }
 
-    public async Task<Product> RemoveAsync(Product product)
+    public async Task RemoveAsync(Product product)
     {
         _context.Products.Remove(product);
         await _context.SaveChangesAsync();
-        return product;
     }
 }

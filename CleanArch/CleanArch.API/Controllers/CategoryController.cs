@@ -7,6 +7,8 @@ namespace CleanArch.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+
+//tenho que arrumar esses métodos tudo.
 public class CategoryController : ControllerBase
 {
     private readonly ICategoryService _service;
