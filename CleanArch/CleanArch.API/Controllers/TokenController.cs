@@ -32,12 +32,4 @@ public class TokenController : ControllerBase
 
         return Created(string.Empty, $"User {user.Email} created with successfully");
     }
-
-    [HttpGet("LogOut")]
-    public async Task<IActionResult> LogOut()
-    {
-        await _authenticate.Logout();
-
-        return Ok();
-    }
 }
