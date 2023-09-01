@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using CleanArch.Application.DTOs;
 using CleanArch.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArch.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 
-//tenho que arrumar esses métodos tudo.
 public class CategoryController : ControllerBase
 {
     private readonly ICategoryService _service;

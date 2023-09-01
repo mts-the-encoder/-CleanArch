@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using CleanArch.Application.DTOs;
 using CleanArch.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArch.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class ProductController : ControllerBase
 {
     private readonly IProductService _service;

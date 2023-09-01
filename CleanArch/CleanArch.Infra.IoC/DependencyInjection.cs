@@ -1,10 +1,13 @@
 ﻿using CleanArch.Application.Interfaces;
 using CleanArch.Application.Mapper;
 using CleanArch.Application.Services;
+using CleanArch.Domain.Account;
 using CleanArch.Domain.Interfaces;
 using CleanArch.Infra.Data.Context;
+using CleanArch.Infra.Data.Identity;
 using CleanArch.Infra.Data.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,19 +19,28 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(opt =>
-            opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+        services.AddDbContext<ApplicationDbContext>(options =>
+             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+             b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
-        services.AddScoped<ICategoryRepository,CategoryRepository>();
-        services.AddScoped<IProductRepository,ProductRepository>();
-        services.AddScoped<ICategoryService,CategoryService>();
-        services.AddScoped<IProductService,ProductService>();
+        services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
+        services.AddScoped<IAuthenticate, AuthenticateService>();
+        services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
+
+        services.ConfigureApplicationCookie(x => x.AccessDeniedPath = "/Account/Login");
+
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddAutoMapper(typeof(DomainToDTO));
 
         var myHandlers = AppDomain.CurrentDomain.Load("CleanArch.Application");
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(myHandlers));
-
 
         return services;
     }
